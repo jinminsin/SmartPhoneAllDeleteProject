@@ -1,1 +1,3 @@
-# SmartPhoneAllDeleteProject
+# 스마트폰 완전 삭제 앱 프로젝트
+
+## 2020/03/16 
