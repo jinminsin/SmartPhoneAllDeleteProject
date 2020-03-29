@@ -5,63 +5,53 @@ import androidx.core.content.ContextCompat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
-import android.widget.TextView;
+import android.widget.ListView;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView textSpace,textSpace2;
-    private TextView internal,external;
-    private File[] externalDrive;
+    private ListView driveList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        driveList = findViewById(R.id.driveList);
+        ArrayList<DriveListItem> list = new ArrayList<>();
+
+        File[] fDir;
+
         if(Build.VERSION.SDK_INT > 18) {
-            externalDrive = getExternalFilesDirs(null);
-            String dir = externalDrive[0].getParentFile().getParentFile().getParentFile().getParentFile().getPath();
+            DriveListItem k = new DriveListItem();
+            fDir = getExternalFilesDirs(null);
 
-            internal = findViewById(R.id.internal);
-            internal.setText(dir);
-            textSpace = findViewById(R.id.capacity);
-            textSpace.setText("(" + getFileSize(checkStorageAllMemory(dir) - checkAvailableMemory(dir)) + "/" + getFileSize(checkStorageAllMemory(dir)) + ")");
+            for(File d:fDir) {
+                d = d.getParentFile().getParentFile().getParentFile().getParentFile();
+                k.setDriveName(d.getName().equals("0") ? "Internal Main Storage" : d.getName());
+                k.setDrivePath(d.getAbsolutePath());
+                k.setDriveFreeSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath())));
+                k.setDriveFullSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath())));
 
-            if (externalDrive.length > 1) {
-                dir = externalDrive[1].getParentFile().getParentFile().getParentFile().getParentFile().getPath();
-                external = findViewById(R.id.external);
-                external.setText(dir);
-                textSpace2 = findViewById(R.id.capacity2);
-                textSpace2.setText("(" + getFileSize(checkStorageAllMemory(dir) - checkAvailableMemory(dir)) + "/" + getFileSize(checkStorageAllMemory(dir)) + ")");
-            } else {
-                external = findViewById(R.id.external);
-                external.setText("대가리 깨짐");
-                textSpace2 = findViewById(R.id.capacity2);
-                textSpace2.setText("내 머리 머머리");
+                list.add(k);
             }
-        }else
-        {
-            externalDrive = ContextCompat.getExternalFilesDirs(this,null);
-            String dir = externalDrive[0].getParentFile().getParentFile().getParentFile().getParentFile().getPath();
+        }else {
+            DriveListItem k = new DriveListItem();
+            fDir = ContextCompat.getExternalFilesDirs(this, null);
 
-            internal = findViewById(R.id.internal);
-            internal.setText(dir);
-            textSpace = findViewById(R.id.capacity);
-            textSpace.setText("(" + getFileSize(checkStorageAllMemory(dir) - checkAvailableMemory(dir)) + "/" + getFileSize(checkStorageAllMemory(dir)) + ")");
+            for(File d:fDir) {
+                d = d.getParentFile().getParentFile().getParentFile().getParentFile();
+                k.setDriveName(d.getName().equals("0") ? "Internal Main Storage" : d.getName());
+                k.setDrivePath(d.getAbsolutePath());
+                k.setDriveFreeSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath())));
+                k.setDriveFullSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath())));
 
-            if (externalDrive.length > 1) {
-                dir = externalDrive[1].getParentFile().getParentFile().getParentFile().getParentFile().getPath();
-                external = findViewById(R.id.external);
-                external.setText(dir);
-                textSpace2 = findViewById(R.id.capacity2);
-                textSpace2.setText("(" + getFileSize(checkStorageAllMemory(dir) - checkAvailableMemory(dir)) + "/" + getFileSize(checkStorageAllMemory(dir)) + ")");
-            } else {
-                external = findViewById(R.id.external);
-                external.setText("대가리 깨짐");
-                textSpace2 = findViewById(R.id.capacity2);
-                textSpace2.setText("내 머리 머머리");
+                list.add(k);
             }
         }
+        DriveListAdapter listAdapter = new DriveListAdapter(list);
+        driveList.setAdapter(listAdapter);
     }
 
     private long checkStorageAllMemory(String dir) {
