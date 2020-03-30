@@ -1,6 +1,8 @@
 package com.koia.smartphonealldelete;
 
-public class DriveListItem {
+import java.io.Serializable;
+
+public class DriveListItem implements Serializable {
     private String driveName;
     private String drivePath;
     private String driveFullSize;

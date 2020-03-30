@@ -2,9 +2,13 @@ package com.koia.smartphonealldelete;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.io.File;
 import java.text.DecimalFormat;
@@ -22,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<DriveListItem> list = new ArrayList<>();
 
         File[] fDir;
-
+        //안드로이드 버전 19 이상
         if(Build.VERSION.SDK_INT > 18) {
             DriveListItem k = new DriveListItem();
             fDir = getExternalFilesDirs(null);
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
                 list.add(k);
             }
-        }else {
+        }else {//18 이하
             DriveListItem k = new DriveListItem();
             fDir = ContextCompat.getExternalFilesDirs(this, null);
 
@@ -50,8 +54,22 @@ public class MainActivity extends AppCompatActivity {
                 list.add(k);
             }
         }
-        DriveListAdapter listAdapter = new DriveListAdapter(list);
-        driveList.setAdapter(listAdapter);
+        final DriveListAdapter listAdapter = new DriveListAdapter(list);//리스트뷰 어뎁터
+        driveList.setAdapter(listAdapter);//세팅
+        driveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {//클릭리스너
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent wiping = new Intent(MainActivity.this, Wiping.class);
+                    wiping.putExtra("DRIVE",(DriveListItem)listAdapter.getItem(i));
+                    startActivityForResult(wiping,0);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //와이핑 성공/실패 반환값
     }
 
     private long checkStorageAllMemory(String dir) {
