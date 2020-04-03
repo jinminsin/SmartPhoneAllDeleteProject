@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/popup_drawble"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/textPopup"
+            android:layout_width="271dp"
+            android:layout_height="191dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/white"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:lines="10"
+            android:maxLines="20"
+            android:minLines="8"
+            android:scrollbars="vertical"
+            android:text="확인을 누르시면 초기화 됩니다." />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/popup_image" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="0dp"
+            android:text="\n   경고!" />
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_weight="400"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:layout_gravity="bottom"
+            android:onClick="pOnclick1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:text="확인"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <Button
+            android:layout_gravity="bottom"
+            android:onClick="pOnclick2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:text="취소"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</LinearLayout>
