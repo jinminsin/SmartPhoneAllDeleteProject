@@ -1,90 +1,49 @@
 package com.koia.smartphonealldelete;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
+import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.StatFs;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import java.io.File;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    private ListView driveList;
+
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        driveList = findViewById(R.id.driveList);
-        ArrayList<DriveListItem> list = new ArrayList<>();
-
-        File[] fDir;
-        //안드로이드 버전 19 이상
-        if(Build.VERSION.SDK_INT > 18) {
-            DriveListItem k = new DriveListItem();
-            fDir = getExternalFilesDirs(null);
-
-            for(File d:fDir) {
-                d = d.getParentFile().getParentFile().getParentFile().getParentFile();
-                k.setDriveName(d.getName().equals("0") ? "Internal Main Storage" : d.getName());
-                k.setDrivePath(d.getAbsolutePath());
-                k.setDriveFreeSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath())));
-                k.setDriveFullSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath())));
-
-                list.add(k);
-            }
-        }else {//18 이하
-            DriveListItem k = new DriveListItem();
-            fDir = ContextCompat.getExternalFilesDirs(this, null);
-
-            for(File d:fDir) {
-                d = d.getParentFile().getParentFile().getParentFile().getParentFile();
-                k.setDriveName(d.getName().equals("0") ? "Internal Main Storage" : d.getName());
-                k.setDrivePath(d.getAbsolutePath());
-                k.setDriveFreeSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath())));
-                k.setDriveFullSize(getFileSize(checkStorageAllMemory(d.getAbsolutePath())));
-
-                list.add(k);
-            }
-        }
-        final DriveListAdapter listAdapter = new DriveListAdapter(list);//리스트뷰 어뎁터
-        driveList.setAdapter(listAdapter);//세팅
-        driveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {//클릭리스너
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent wiping = new Intent(MainActivity.this, Wiping.class);
-                    wiping.putExtra("DRIVE",(DriveListItem)listAdapter.getItem(i));
-                    startActivityForResult(wiping,0);
-            }
-        });
+        Intent loading = new Intent(MainActivity.this, LoadingMain.class);
+        startActivity(loading);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //드라이드 리스트
+        if(requestCode == 0) {
+            if (resultCode == 0)//와이핑 시작
+            {
+                Intent wiping = new Intent(this,Wiping.class);
+                wiping.putExtra("DRIVE",data.getSerializableExtra("DRIVE"));
+                startActivityForResult(wiping,1);
+            }
+
+        }
         //와이핑 성공/실패 반환값
+        if(requestCode == 1) {
+            if (resultCode == 0)//성공
+            {
+
+            } else //실패
+            {
+
+            }
+        }
     }
 
-    private long checkStorageAllMemory(String dir) {
-        StatFs stat= new StatFs(dir);
-        return Build.VERSION.SDK_INT > 18 ? stat.getTotalBytes() : stat.getBlockSize() * stat.getBlockCount();
-    }
-
-    private long checkAvailableMemory(String dir) {
-        StatFs stat= new StatFs(dir);
-        return Build.VERSION.SDK_INT > 18 ? stat.getAvailableBytes() : stat.getAvailableBlocks() * stat.getBlockCount();
-    }
-
-    public String getFileSize(long size) {
-        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
-        int digitGroups = (int) (Math.log(size) / Math.log(1024));
-        return new DecimalFormat("#,###.##").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    public void startWiping(View view) {
+        Intent listItem = new Intent(MainActivity.this, DriveList.class);
+        startActivityForResult(listItem,0);
     }
 }
