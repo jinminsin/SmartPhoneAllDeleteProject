@@ -31,24 +31,35 @@ public class MainActivity extends AppCompatActivity {
         /* 쓰레기값의 cache file 생성 */
         String filename;
         Runnable CTF = new CreateTempFile();
-        Thread[] CTFt = new Thread[16];
+        Runnable CTF2 = new CreateTempFile1();
+        //Thread[] CTFt = new Thread[2];
+        Thread CTFt = new Thread(CTF);
+        Thread CTFt2 = new Thread(CTF2);
 
         long beforeTime = System.currentTimeMillis();
         for (int count=0; count<30; count++) {
             filename = "TestFile"+count;
 
             try {
-                for (int i=0; i<16; i++) {
+                /*for (int i=0; i<2; i++) {
                     CTFt[i] = new Thread(CTF);
                     CTFt[i].start();
+                }*/
+                CTFt.start();
+                CTFt2.start();
+                try {
+                    CTFt.join();
+                    CTFt2.join();
+                } catch (InterruptedException e){
+                    e.printStackTrace();
                 }
-                for (int i=0; i<16; i++) {
+                /*for (int i=0; i<2; i++) {
                     try {
                         CTFt[i].join();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 File cacheDir = getExternalCacheDir();
                 File cacheFile = new File(cacheDir.getAbsolutePath(), filename);
                 FileOutputStream FOS = new FileOutputStream(cacheFile.getAbsolutePath());

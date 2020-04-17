@@ -8,7 +8,7 @@ import static com.example.filecreateanddelete.MainActivity.BUF_SIZE;
 import static com.example.filecreateanddelete.MainActivity.intbuffer;
 import static com.example.filecreateanddelete.MainActivity.threadcount;
 
-public class CreateTempFile implements Runnable{
+public class CreateTempFile1 implements Runnable{
     SecureRandom random = new SecureRandom();
     int a;
 
@@ -16,7 +16,7 @@ public class CreateTempFile implements Runnable{
         for(; threadcount<BUF_SIZE; threadcount++) {
             a = random.nextInt();
             intbuffer[threadcount] = (byte)a;
-            Log.d("test", "thread1 : " + a);
+            Log.d("test", "thread2 : " + a);
         }
     }
 }
