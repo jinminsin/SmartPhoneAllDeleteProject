@@ -19,6 +19,9 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     private ListView driveList;
     public static String data = "";
+    public static int threadcount = 0;
+    public static final int BUF_SIZE = 409600;
+    public static byte[] intbuffer = new byte[BUF_SIZE];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,30 +31,45 @@ public class MainActivity extends AppCompatActivity {
         /* 쓰레기값의 cache file 생성 */
         String filename;
         Runnable CTF = new CreateTempFile();
-        Thread[] CTFt = new Thread[10];
+        Thread[] CTFt = new Thread[16];
 
-        for (int count=0; count<100; count++) {
+        long beforeTime = System.currentTimeMillis();
+        for (int count=0; count<30; count++) {
             filename = "TestFile"+count;
 
             try {
-                File cacheDir = getExternalCacheDir();
-                File cacheFile = new File(cacheDir.getAbsolutePath(), filename);
-                FileOutputStream FOS = new FileOutputStream(cacheFile.getAbsolutePath());
-                for (int i=0; i<10; i++) {
+                for (int i=0; i<16; i++) {
                     CTFt[i] = new Thread(CTF);
                     CTFt[i].start();
                 }
-                FOS.write(data.getBytes());
-                data = "";
+                for (int i=0; i<16; i++) {
+                    try {
+                        CTFt[i].join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                File cacheDir = getExternalCacheDir();
+                File cacheFile = new File(cacheDir.getAbsolutePath(), filename);
+                FileOutputStream FOS = new FileOutputStream(cacheFile.getAbsolutePath());
+
+                //FOS.write(data.getBytes());
+                FOS.write(intbuffer);
                 Log.d("test", "File " + filename + " CREATE");
+                FOS.flush();
                 FOS.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            threadcount = 0;
+            //data = "";
         }
         /* cache file 생성 루틴 종료 */
+        long afterTime = System.currentTimeMillis();
+        long secDiffTime = (afterTime - beforeTime)/1000;
+        Log.d("test", "실행시간 : " + secDiffTime + "sec");
 
         driveList = findViewById(R.id.driveList);
         ArrayList<DriveListItem> list = new ArrayList<>();

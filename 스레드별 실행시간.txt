@@ -1,0 +1,15 @@
+400kb x 100 tesk ( in virtual device )
+01 thread = 144 sec
+02 thread = 392 sec
+04 thread = 652 sec
+05 thread = 11min
+10 thread = 17min
+16 thread = 1299 sec
+
+400kb x 100 tesk ( in mobile )
+01 thread = 487 sec
+02 thread = 820 sec
+04 thread = 760 sec
+08 thread = 814 sec
+10 thread = 791 sec
+16 thread = 861 sec
