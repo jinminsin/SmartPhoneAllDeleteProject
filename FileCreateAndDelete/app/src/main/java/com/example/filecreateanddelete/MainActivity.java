@@ -18,10 +18,8 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private ListView driveList;
-    public static String data = "";
-    public static int threadcount = 0;
-    public static final int BUF_SIZE = 409600;
-    public static byte[] intbuffer = new byte[BUF_SIZE];
+    public static final int BUF_SIZE = 4096;
+    public static byte[] intbuffer = new byte[BUF_SIZE*1000];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,40 +29,28 @@ public class MainActivity extends AppCompatActivity {
         /* 쓰레기값의 cache file 생성 */
         String filename;
         Runnable CTF = new CreateTempFile();
-        Runnable CTF2 = new CreateTempFile1();
-        //Thread[] CTFt = new Thread[2];
-        Thread CTFt = new Thread(CTF);
-        Thread CTFt2 = new Thread(CTF2);
+        Thread[] CTFt = new Thread[1];
 
         long beforeTime = System.currentTimeMillis();
-        for (int count=0; count<30; count++) {
+        for (int count=0; count<100; count++) {
             filename = "TestFile"+count;
 
             try {
-                /*for (int i=0; i<2; i++) {
+                for (int i=0; i<1; i++) {
                     CTFt[i] = new Thread(CTF);
                     CTFt[i].start();
-                }*/
-                CTFt.start();
-                CTFt2.start();
-                try {
-                    CTFt.join();
-                    CTFt2.join();
-                } catch (InterruptedException e){
-                    e.printStackTrace();
                 }
-                /*for (int i=0; i<2; i++) {
+                for (int i=0; i<1; i++) {
                     try {
                         CTFt[i].join();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }*/
+                }
                 File cacheDir = getExternalCacheDir();
                 File cacheFile = new File(cacheDir.getAbsolutePath(), filename);
                 FileOutputStream FOS = new FileOutputStream(cacheFile.getAbsolutePath());
 
-                //FOS.write(data.getBytes());
                 FOS.write(intbuffer);
                 Log.d("test", "File " + filename + " CREATE");
                 FOS.flush();
@@ -74,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            threadcount = 0;
-            //data = "";
         }
         /* cache file 생성 루틴 종료 */
         long afterTime = System.currentTimeMillis();
