@@ -47,7 +47,7 @@ public class DriveList extends Activity {
 
             for (File d : fDir) {
                 d = d.getParentFile().getParentFile().getParentFile().getParentFile();
-                k.setDriveName(d.getName().equals("0") ? "Internal Main Storage" : d.getName());
+                k.setDriveName(d.getName().equals("0") ? "내부저장소" : d.getName());
                 k.setDrivePath(d.getAbsolutePath());
                 k.setDriveFreeSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath()));
                 k.setDriveFullSize(checkStorageAllMemory(d.getAbsolutePath()));

@@ -8,10 +8,10 @@
         />
 
     <size
-        android:width="400dp"
+        android:width="300dp"
         android:height="120dp"/>
     <corners
-        android:radius="40dp" />
+        android:radius="40dp"/>
     <gradient
         android:startColor="@android:color/holo_red_light"
         android:endColor="@android:color/holo_red_light"  />

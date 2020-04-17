@@ -12,15 +12,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent loading = new Intent(MainActivity.this, LoadingMain.class);
-        startActivity(loading);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //드라이드 리스트
+        //드라이브 리스트
         if(requestCode == 0) {
             if (resultCode == 0)//와이핑 시작
             {

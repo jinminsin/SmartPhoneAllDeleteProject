@@ -15,15 +15,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="25dp"
-                android:background="@drawable/popup_drawble"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/popup_screen"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="280dp"
                     android:layout_height="160dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="40dp"
                     android:background="@android:color/white"
                     android:ems="10"
                     android:fontFamily="@font/font_content"
@@ -37,30 +37,31 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="85dp"
-                    android:gravity="center">
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    android:paddingLeft="1dp"
+                    android:paddingRight="1dp"
+                    android:paddingBottom="1dp">
 
                     <Button
                         android:id="@+id/pButtonOk"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@android:color/black"
+                        android:background="@drawable/popup_leftbutton"
                         android:text="확인"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
 
                     <Button
                         android:id="@+id/pButtonNo"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@android:color/black"
+                        android:background="@drawable/popup_rightbutton"
                         android:text="취소"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
 
                 </LinearLayout>
 
@@ -68,19 +69,11 @@
         </FrameLayout>
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:src="@drawable/popup_image" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="0dp"
-            android:fontFamily="@font/font_subject"
-            android:gravity="center"
-            android:text="경고!"
-            android:textColor="@android:color/black"
-            android:textSize="20dp" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/warning_icon"
+            android:src="@drawable/warning_hand"/>
 
 
     </FrameLayout>
