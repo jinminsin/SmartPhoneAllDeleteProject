@@ -10,3 +10,5 @@
  - 난수 생성과정에 있어서 시간이 너무 오래걸림 - 개선됨
  - 파일 출력 속도는 문제되지 않는편
  - 멀티쓰레드를 사용했을 때 오히려 성능 저하가 일어남. 오버헤드가 발생하는듯.
+ - getExternalCacheDir()를 thread에서 사용할 방법이 필요함.
+   -> ContextCompat.getExternalCacheDirs()를 활용하면 가능할 것으로 보임
