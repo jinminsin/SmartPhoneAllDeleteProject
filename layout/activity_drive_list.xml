@@ -6,7 +6,34 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="#FFFFFF"
     tools:context=".DriveList">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/font_subject"
+            android:text="드라이브 리스트"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/drivelength"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/font_content"
+            android:gravity="bottom|end"
+            android:text="( 내부 : 0 / 외부 : 0 )"
+            android:textSize="18dp" />
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/driveList"

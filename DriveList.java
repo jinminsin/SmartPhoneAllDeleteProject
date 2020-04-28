@@ -6,14 +6,17 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
 
 public class DriveList extends Activity {
+    private TextView driveLength;
     private ListView driveList;
     private Popup dialog;
     private DriveListItem key_item;
@@ -24,17 +27,18 @@ public class DriveList extends Activity {
         setContentView(R.layout.activity_drive_list);
 
         driveList = findViewById(R.id.driveList);
+        driveLength = findViewById(R.id.drivelength);
         ArrayList<DriveListItem> list = new ArrayList<>();
 
         File[] fDir;
         //안드로이드 버전 19 이상
         if (Build.VERSION.SDK_INT > 18) {
-            DriveListItem k = new DriveListItem();
             fDir = getExternalFilesDirs(null);
 
             for (File d : fDir) {
+                DriveListItem k = new DriveListItem();
                 d = d.getParentFile().getParentFile().getParentFile().getParentFile();
-                k.setDriveName(d.getName().equals("0") ? "Internal Main Storage" : d.getName());
+                k.setDriveName(d.getName().equals("0") ? "내부저장소" : d.getName());
                 k.setDrivePath(d.getAbsolutePath());
                 k.setDriveFreeSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath()));
                 k.setDriveFullSize(checkStorageAllMemory(d.getAbsolutePath()));
@@ -42,10 +46,10 @@ public class DriveList extends Activity {
                 list.add(k);
             }
         } else {//18 이하
-            DriveListItem k = new DriveListItem();
             fDir = ContextCompat.getExternalFilesDirs(this, null);
 
             for (File d : fDir) {
+                DriveListItem k = new DriveListItem();
                 d = d.getParentFile().getParentFile().getParentFile().getParentFile();
                 k.setDriveName(d.getName().equals("0") ? "내부저장소" : d.getName());
                 k.setDrivePath(d.getAbsolutePath());
@@ -65,6 +69,8 @@ public class DriveList extends Activity {
                showAlertDialog();
             }
         });
+
+        driveLength.setText("( 내부 : " + (listAdapter.getCount() > 0 ? 1 : 0) + " / 외부 : " + (listAdapter.getCount() > 1 ? listAdapter.getCount() - 1 : 0) + " )");
     }
 
     private long checkStorageAllMemory(String dir) {

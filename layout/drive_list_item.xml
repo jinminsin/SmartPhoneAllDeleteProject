@@ -29,19 +29,21 @@
                 android:id="@+id/drive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="Main Drive ( 0B / 0B )"
-                android:textSize="18dp" />
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/drivePath"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="/"
-                android:textSize="18dp" />
+                android:textSize="16dp" />
 
         </LinearLayout>
     </LinearLayout>

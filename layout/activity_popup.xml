@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
-    android:layout_height="300dp"
+    android:layout_height="340dp"
+    android:layout_gravity="center_horizontal"
     android:orientation="vertical">
 
     <FrameLayout
@@ -16,6 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
                 android:background="@drawable/popup_screen"
                 android:orientation="vertical">
 
@@ -31,9 +33,9 @@
                     android:lines="10"
                     android:maxLines="20"
                     android:scrollbars="vertical"
-                    android:text="최소 30분 이상의 여유 시간이 필요하며, 중도에 강제로 멈출 경우 에러가 나타날 수 있습니다.\n충분한 배터리 용량을 확인하시고, 충전기에 연결 후에 시작해주세요."
+                    android:text="30분 정도의 여유 시간을 필요로 하며, 중도에 강제로 멈추게 할 경우 에러가 나타날 수 있습니다.\n충분한 배터리 용량을 확인하시고, 충전기에 연결 후 시작해주세요."
                     android:textColor="@android:color/black"
-                    android:textSize="20dp" />
+                    android:textSize="18dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,7 +75,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/warning_icon"
-            android:src="@drawable/warning_hand"/>
+            android:src="@drawable/warning_hand" />
 
 
     </FrameLayout>
