@@ -1,12 +1,21 @@
 package com.example.filecreateanddelete;
 
-public class DriveListItem {
+import java.io.Serializable;
+import java.text.DecimalFormat;
+
+public class DriveListItem implements Serializable {
     private String driveName;
     private String drivePath;
-    private String driveFullSize;
-    private String driveFreeSize;
+    private long driveFullSize;
+    private long driveFreeSize;
 
     public DriveListItem() {
+    }
+
+    public String getFileSize(long size) {
+        final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+        int digitGroups = (int) (Math.log(size) / Math.log(1024));
+        return new DecimalFormat("#,###.##").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
     public String getDriveName() {
@@ -26,19 +35,19 @@ public class DriveListItem {
     }
 
 
-    public String getDriveFullSize() {
+    public long getDriveFullSize() {
         return driveFullSize;
     }
 
-    public void setDriveFullSize(String driveFullSize) {
+    public void setDriveFullSize(long driveFullSize) {
         this.driveFullSize = driveFullSize;
     }
 
-    public String getDriveFreeSize() {
+    public long getDriveFreeSize() {
         return driveFreeSize;
     }
 
-    public void setDriveFreeSize(String driveFreeSize) {
+    public void setDriveFreeSize(long driveFreeSize) {
         this.driveFreeSize = driveFreeSize;
     }
 }

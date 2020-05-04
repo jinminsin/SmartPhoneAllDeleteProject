@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class DriveListAdapter extends BaseAdapter {
-    private ArrayList<DriveListItem> item = new ArrayList<DriveListItem>();
+    private ArrayList<DriveListItem> item;
 
     public DriveListAdapter(ArrayList<DriveListItem> item)
     {
@@ -41,13 +41,11 @@ public class DriveListAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.drive_list_item, viewGroup, false);
         }
 
-        TextView name = view.findViewById(R.id.driveName);
+        TextView name = view.findViewById(R.id.drive);
         TextView path = view.findViewById(R.id.drivePath);
-        TextView capacity = view.findViewById(R.id.driveCapacity);
 
-        name.setText(((DriveListItem) getItem(i)).getDriveName());
+        name.setText(((DriveListItem) getItem(i)).getDriveName() + " ( " + ((DriveListItem) getItem(i)).getFileSize(((DriveListItem) getItem(i)).getDriveFreeSize()) + " / " + ((DriveListItem) getItem(i)).getFileSize(((DriveListItem) getItem(i)).getDriveFullSize()) + " )");
         path.setText(((DriveListItem) getItem(i)).getDrivePath());
-        capacity.setText("( " + ((DriveListItem) getItem(i)).getDriveFreeSize() + " / " + ((DriveListItem) getItem(i)).getDriveFullSize() + " )");
 
         return view;
     }

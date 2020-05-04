@@ -1,11 +1,23 @@
-3.9MB x 100 tesk ( 390MB )
-virtual device : 23 sec
-mobile device (A5) : 9 ~ 14 sec
+# 2020-04-18
+   3.9MB x 100 tesk ( 390MB )
+   virtual device : 23 sec
+   mobile device (A5) : 9 ~ 14 sec
 
-400KB x 1000 tesk ( 390MB )
-virtual device : 27 sec
-mobile device (A5) : 15 ~ 16 sec
+   400KB x 1000 tesk ( 390MB )
+   virtual device : 27 sec
+   mobile device (A5) : 15 ~ 16 sec
 
-40KB x 10000 tesk ( 390MB )
-virtual device : 205 sec
-mobile device (A5) : 49 ~ 60 sec
+   40KB x 10000 tesk ( 390MB )
+   virtual device : 205 sec
+   mobile device (A5) : 49 ~ 60 sec
+
+# 2020-05-05 update
+   40MB x 10 tesk ( 400MB )
+   virtual device : 13 ~ 14 sec
+   mobile device (A5) : 15 ~ 17 sec
+
+   4MB x 100 tesk ( 400MB )
+   virtual device : 15 ~ 16 sec
+   mobile device (A5) : 22 ~ 26 sec
+   
+   이보다 작은 단위는 비효율적이므로 측정하지 않음
