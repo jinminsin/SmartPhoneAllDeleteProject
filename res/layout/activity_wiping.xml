@@ -10,7 +10,7 @@
     tools:context=".Wiping">
 
 
-    <com.koia.smartphonealldelete.outlineTextView
+    <com.example.myapplication.outlineTextView
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -119,35 +119,44 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <Button
-        android:elevation="10dp"
-        android:background="@drawable/button_image"
         android:id="@+id/returnedmain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_width="105dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="70dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button_image"
         android:fontFamily="@font/font_content"
         android:text="돌아가기"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/turnoff"
+        app:layout_constraintHorizontal_bias="0.310"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:elevation="10dp"
-        android:background="@drawable/button_image_2"
         android:id="@+id/turnoff"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="95dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button_image_2"
         android:fontFamily="@font/font_content"
         android:text="앱 끄기"
         android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buttonGroupe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="155dp"
+        android:layout_marginBottom="75dp"
+        android:onClick="Onclick"
+        android:text="Groupe"
+        android:textSize="20sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
