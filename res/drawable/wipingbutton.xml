@@ -9,7 +9,7 @@
 
     <item android:top="3dp" android:left="3dp" android:right="3dp" android:bottom="3dp">
         <shape android:shape="oval">
-            <gradient android:type="radial" android:gradientRadius="100dp" android:startColor="#F2F2F2" android:endColor="#D3D3D3" />
+            <gradient android:type="radial" android:gradientRadius="100dp" android:startColor= "#B3B3B3"  android:endColor="#C2C2C2"/>
         </shape>
     </item>
 
