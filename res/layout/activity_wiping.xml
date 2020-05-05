@@ -119,6 +119,7 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <Button
+        android:visibility="invisible"
         android:id="@+id/turnoff"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -132,7 +133,8 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/returnedmain"
+        android:onClick="onClickButton"
+        android:id="@+id/stop"
         android:layout_width="105dp"
         android:layout_height="45dp"
         android:layout_marginStart="45dp"
@@ -140,7 +142,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_image"
         android:fontFamily="@font/font_content"
-        android:text="돌아가기"
+        android:text="중지하기"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/turnoff"
@@ -148,14 +150,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/stop"
+        android:visibility="invisible"
+        android:id="@+id/returnmain"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="248dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_image_2"
         android:fontFamily="@font/font_content"
-        android:text="중지하기"
+        android:text="돌아가기"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
