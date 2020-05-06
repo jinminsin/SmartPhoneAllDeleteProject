@@ -27,14 +27,12 @@ public class MainActivity extends Activity {
             }
 
         }
-        //와이핑 성공/실패 반환값
+        //wiping 이후 작동
         if(requestCode == 1) {
-            if (resultCode == 0)//성공
+            // resultCode == 0  메인으로 돌아가기
+            if (resultCode == 1)// -> 애플리케이션 종료
             {
-
-            } else //실패
-            {
-
+                    finish();
             }
         }
     }

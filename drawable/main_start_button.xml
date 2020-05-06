@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="oval">
+            <gradient android:type="radial" android:gradientRadius="100dp" android:startColor="#DCDCDC" android:endColor="#CCCCCC" />
+        </shape>
+    </item>
+
+    <item android:top="3dp" android:left="3dp" android:right="3dp" android:bottom="3dp">
+        <shape android:shape="oval">
+            <gradient android:type="radial" android:gradientRadius="100dp" android:startColor= "#B3B3B3"  android:endColor="#C2C2C2"/>
+        </shape>
+    </item>
+
+    <item android:top="6dp" android:left="6dp" android:right="6dp" android:bottom="6dp">
+        <shape android:shape="oval">
+            <gradient android:type="radial" android:gradientRadius="100dp" android:startColor="#AAAAAA" android:endColor="#BBBBBB" />
+        </shape>
+    </item>
+
+    <item android:top="10dp" android:left="10dp" android:right="10dp" android:bottom="10dp">
+        <shape android:shape="oval">
+            <solid android:color="#ffffff" />
+        </shape>
+    </item>
+
+    <item android:top="60dp" android:left="60dp" android:right="60dp" android:bottom="60dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFF99" />
+        </shape>
+    </item>
+
+    <item android:top="65dp" android:left="65dp" android:right="65dp" android:bottom="65dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF" />
+        </shape>
+    </item>
+
+    <item android:top="70dp" android:left="70dp" android:right="70dp" android:bottom="70dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFF66" />
+        </shape>
+    </item>
+
+</layer-list>

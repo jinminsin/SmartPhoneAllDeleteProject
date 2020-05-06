@@ -119,7 +119,8 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <Button
-        android:id="@+id/returnedmain"
+        android:id="@+id/returnedmainBtn"
+        android:onClick="clickBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -130,12 +131,37 @@
         android:fontFamily="@font/font_content"
         android:text="돌아가기"
         android:textSize="20dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        android:background="@drawable/wiping_button_on"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/turnoff"
+        app:layout_constraintEnd_toStartOf="@id/stopBtn"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/turnoff"
+        android:id="@+id/stopBtn"
+        android:onClick="clickBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/font_content"
+        android:text="중지하기"
+        android:textSize="20dp"
+        android:clickable="false"
+        android:background="@drawable/wiping_button_on"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/turnoffBtn"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/returnedmainBtn"
+      />
+
+    <Button
+        android:id="@+id/turnoffBtn"
+        android:onClick="clickBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -144,8 +170,13 @@
         android:fontFamily="@font/font_content"
         android:text="앱 끄기"
         android:textSize="20dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        android:background="@drawable/wiping_button_on"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/stopBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

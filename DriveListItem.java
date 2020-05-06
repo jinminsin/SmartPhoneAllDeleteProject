@@ -12,7 +12,7 @@ public class DriveListItem implements Serializable {
     public DriveListItem() {
     }
 
-    public String getFileSize(long size) {
+    public static String getFileSize(long size) {
         final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
         int digitGroups = (int) (Math.log(size) / Math.log(1024));
         return new DecimalFormat("#,###.##").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
