@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,6 +34,9 @@ public class Wiping extends Activity {
 
 
     public void onClickButton(View view) {
+        Button button = (Button)findViewById(R.id.stop);
+        final Animation myAnim = AnimationUtils.loadAnimation(this, R.anim.button_scale);
+        button.startAnimation(myAnim);
         Button btn2 = (Button)findViewById(R.id.returnmain);
         Button btn3 = (Button)findViewById(R.id.turnoff);
         if(btn2.getVisibility()  == View.VISIBLE && btn3.getVisibility() == View.VISIBLE){
