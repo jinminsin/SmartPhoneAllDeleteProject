@@ -37,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_subject"
-        android:text="용량을 확인하고 있습니다..."
+        android:text=" "
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +73,7 @@
         android:layout_marginRight="20dp"
         android:max="100"
         android:progress="45"
-        android:progressDrawable="@drawable/prgressbar"
+        android:progressDrawable="@drawable/progressbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,49 +119,64 @@
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <Button
-        android:visibility="invisible"
-        android:id="@+id/turnoff"
+        android:id="@+id/returnedmainBtn"
+        android:onClick="clickBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_image_2"
-        android:fontFamily="@font/font_content"
-        android:text="앱 끄기"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:onClick="onClickButton"
-        android:id="@+id/stop"
-        android:layout_width="105dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_image"
-        android:fontFamily="@font/font_content"
-        android:text="중지하기"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/turnoff"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:visibility="invisible"
-        android:id="@+id/returnmain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="248dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_image_2"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/font_content"
         android:text="돌아가기"
         android:textSize="20dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        android:background="@drawable/wiping_button_on"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/stopBtn"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/stopBtn"
+        android:onClick="clickBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/font_content"
+        android:text="중지하기"
+        android:textSize="20dp"
+        android:clickable="false"
+        android:background="@drawable/wiping_button_on"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/turnoffBtn"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/returnedmainBtn"
+        />
+
+    <Button
+        android:id="@+id/turnoffBtn"
+        android:onClick="clickBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/font_content"
+        android:text="앱 끄기"
+        android:textSize="20dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        android:background="@drawable/wiping_button_on"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/stopBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
