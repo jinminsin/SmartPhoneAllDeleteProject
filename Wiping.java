@@ -49,7 +49,7 @@ public class Wiping extends Activity {
         bar = findViewById(R.id.progress);
 
         k = (DriveListItem)getIntent().getSerializableExtra("DRIVE");
-        drive.setText(k.getDriveName()+"\n( "+k.getFileSize(k.getDriveFreeSize())+" / "+k.getFileSize(k.getDriveFullSize())+" )");
+        drive.setText(k.getDriveName()+"\n( "+k.getFileSize(k.getDriveFullSize() - k.getDriveFreeSize())+" / "+k.getFileSize(k.getDriveFullSize())+" )");
         bar.setProgress((int)(75 * ((double)stageData/(double)k.getDriveFreeSize())));
 
         m = new Handler(new Handler.Callback() {
@@ -107,7 +107,7 @@ public class Wiping extends Activity {
                 }
             }
         }
-        Log.d("test","File "+dir.getName()+" DELETE " + DriveListItem.getFileSize(dir.length()));
+        Log.d("test","File "+dir.getName()+" DELETE " );
         return dir.delete();
     }
 
@@ -118,7 +118,6 @@ public class Wiping extends Activity {
 
     private void complete()
     {
-        stopBtn.setClickable(false);
         stopBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.wiping_button_off));
         returnBtn.setClickable(true);
         returnBtn.setVisibility(View.VISIBLE);
@@ -133,13 +132,13 @@ public class Wiping extends Activity {
         switch(view.getId())
         {
             case R.id.stopBtn:
+                stopBtn.setClickable(false);
                 work = false;// 작업 스레드 상황 종료
                 try {
                     th.join();//작업 스레드 상황 종료 대기
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
                 break;
             case R.id.returnedmainBtn:
                 setResult(0);
@@ -156,16 +155,38 @@ public class Wiping extends Activity {
     class serviceThread implements Runnable{
         private  Thread CTF[];
         private CreateTempFile[] r;
+        long storageSize;
+        private int[] size = {1024*1024, 1024};
+        private int fileindex=0;
         @Override
         public void run() {
+            storageSize = k.getDriveFreeSize();
+            long beforeTime = System.currentTimeMillis();
+
+            for(int i=0;i<size.length;i++)
+                insert(size[i]);
             /* cache file 생성 시작 */
+
+            long afterTime = System.currentTimeMillis();
+            long secDiffTime = (afterTime - beforeTime) / 1000;
+            Log.d("test", "실행시간 : " + secDiffTime + "sec");
+            /* cache file 생성 종료 */
+
+            /* cache 파일 삭제함수 실행 */
+            clearApplicationData();
+            m.sendEmptyMessage(2);
+        }
+
+        public void insert(int size) {
             CTF = new Thread[10];
             r = new CreateTempFile[10];
-            long beforeTime = System.currentTimeMillis();
             m.sendEmptyMessage(1);
-            for (int count = 0; work && count < 1; count++) {
-                for (int i = 0;  work && i < CTF.length; i++) {
-                    r[i] = new CreateTempFile(count  * 10 + i,1024*1024);
+            int repeat = (int) (storageSize / (size * 1024)); // 384 GB
+            Log.d("반복", "" + repeat);
+
+            for (int count = 0; work && count < (repeat / 10); count++) { // 38
+                for (int i = 0; i < CTF.length; i++) {//10GB
+                    r[i] = new CreateTempFile(fileindex++, size);
                     CTF[i] = new Thread(r[i]);
                     CTF[i].start();
                 }
@@ -178,14 +199,41 @@ public class Wiping extends Activity {
                     }
                 }
             }
-            long afterTime = System.currentTimeMillis();
-            long secDiffTime = (afterTime - beforeTime) / 1000;
-            Log.d("test", "실행시간 : " + secDiffTime + "sec");
-            /* cache file 생성 종료 */
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            /* cache 파일 삭제함수 실행 */
-            clearApplicationData();
-            m.sendEmptyMessage(2);
+            if(work) {
+                storageSize = k.getDriveFreeSize() - stageData;
+                Log.d("스토리지", "" + DriveListItem.getFileSize(storageSize));
+                repeat = (int) (storageSize / (size * 1024));//4GB
+                Log.d("반복2", "" + repeat);
+                CTF = new Thread[repeat];// 9gb
+                r = new CreateTempFile[repeat];
+
+                for (int i = 0; i < CTF.length; i++) {
+                    r[i] = new CreateTempFile(fileindex++, size);
+                    CTF[i] = new Thread(r[i]);
+                    CTF[i].start();
+                }
+
+                for (int i = 0; i < CTF.length; i++) {
+                    try {
+                        CTF[i].join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                storageSize = k.getDriveFreeSize() - stageData;
+            }
         }
 
         public Thread[] getThread(){
@@ -195,20 +243,24 @@ public class Wiping extends Activity {
         public CreateTempFile[] getR() {
             return r;
         }
+
     }
 
     //파일 생성 스레드
     class CreateTempFile implements Runnable{
+        private int mode;
         private FileController cachefile;
         private int filenumber;
 
         public CreateTempFile (int inputnumber,int size){
-            cachefile = new FileController(inputnumber, size, getApplicationContext());
+            mode = size == 1024*1024 ? 0 : 1;
+            cachefile = new FileController(inputnumber, mode == 0  ? 4 * size :  size * 1024, getApplicationContext());
+            //GB 추가일 때 4메가씩, MB 추가일 시엔 1메가씩
             filenumber = inputnumber;
         }
         public void run(){
             int counter = 0;
-            while(work && counter < 256){
+            while(work && counter <  (mode == 0 ? 256  : 1)){
                 cachefile.fillbuffer();
                 cachefile.writedata();
                 m.sendMessage(m.obtainMessage(0,cachefile.getBufferSize()));

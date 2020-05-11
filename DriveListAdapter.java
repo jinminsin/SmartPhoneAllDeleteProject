@@ -44,7 +44,7 @@ public class DriveListAdapter extends BaseAdapter {
         TextView name = view.findViewById(R.id.drive);
         TextView path = view.findViewById(R.id.drivePath);
 
-        name.setText(((DriveListItem) getItem(i)).getDriveName() + " ( " + ((DriveListItem) getItem(i)).getFileSize(((DriveListItem) getItem(i)).getDriveFreeSize()) + " / " + ((DriveListItem) getItem(i)).getFileSize(((DriveListItem) getItem(i)).getDriveFullSize()) + " )");
+        name.setText(((DriveListItem) getItem(i)).getDriveName() + " ( " + ((DriveListItem) getItem(i)).getFileSize(((DriveListItem) getItem(i)).getDriveFullSize() - ((DriveListItem) getItem(i)).getDriveFreeSize()) + " / " + ((DriveListItem) getItem(i)).getFileSize(((DriveListItem) getItem(i)).getDriveFullSize()) + " )");
         path.setText(((DriveListItem) getItem(i)).getDrivePath());
 
         return view;

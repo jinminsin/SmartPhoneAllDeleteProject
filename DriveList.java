@@ -40,7 +40,7 @@ public class DriveList extends Activity {
                 d = d.getParentFile().getParentFile().getParentFile().getParentFile();
                 k.setDriveName(d.getName().equals("0") ? "내부저장소" : d.getName());
                 k.setDrivePath(d.getAbsolutePath());
-                k.setDriveFreeSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath()));
+                k.setDriveFreeSize(checkAvailableMemory(d.getAbsolutePath()));
                 k.setDriveFullSize(checkStorageAllMemory(d.getAbsolutePath()));
 
                 list.add(k);
@@ -53,7 +53,7 @@ public class DriveList extends Activity {
                 d = d.getParentFile().getParentFile().getParentFile().getParentFile();
                 k.setDriveName(d.getName().equals("0") ? "내부저장소" : d.getName());
                 k.setDrivePath(d.getAbsolutePath());
-                k.setDriveFreeSize(checkStorageAllMemory(d.getAbsolutePath()) - checkAvailableMemory(d.getAbsolutePath()));
+                k.setDriveFreeSize(checkAvailableMemory(d.getAbsolutePath()));
                 k.setDriveFullSize(checkStorageAllMemory(d.getAbsolutePath()));
 
                 list.add(k);
