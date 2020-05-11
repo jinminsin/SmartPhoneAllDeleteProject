@@ -1,8 +1,11 @@
 package com.koia.smartphonealldelete;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -12,6 +15,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActivityManager actManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+        actManager.getMemoryInfo(memInfo);
+        long totalMemory = memInfo.totalMem;
+        Log.d("토탈 메모리",""+DriveListItem.getFileSize(totalMemory));
     }
 
     @Override

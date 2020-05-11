@@ -1,6 +1,7 @@
 package com.koia.smartphonealldelete;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 public class Wiping extends Activity {
+    private long stageData = 0;
+    private TextView stage;
+    private TextView percentage;
     private TextView drive;
     private ProgressBar bar;
     private Button stopBtn, returnBtn, turnoffBtn;
@@ -36,6 +41,8 @@ public class Wiping extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         drive = findViewById(R.id.drive);
+        stage = findViewById(R.id.stage);
+        percentage = findViewById(R.id.percentage);
         stopBtn = findViewById(R.id.stopBtn);
         returnBtn = findViewById(R.id.returnedmainBtn);
         turnoffBtn = findViewById(R.id.turnoffBtn);
@@ -43,16 +50,17 @@ public class Wiping extends Activity {
 
         k = (DriveListItem)getIntent().getSerializableExtra("DRIVE");
         drive.setText(k.getDriveName()+"\n( "+k.getFileSize(k.getDriveFreeSize())+" / "+k.getFileSize(k.getDriveFullSize())+" )");
-        bar.setProgress((int)(75 * ((double)k.getDriveFreeSize()/(double)k.getDriveFullSize())));
+        bar.setProgress((int)(75 * ((double)stageData/(double)k.getDriveFreeSize())));
 
         m = new Handler(new Handler.Callback() {
             @Override
             public synchronized boolean handleMessage(@NonNull Message msg) {
                 switch (msg.what) {
                     case 0:
-                             k.setDriveFreeSize(k.getDriveFreeSize() - (int)msg.obj);
-                            drive.setText(k.getDriveName() + "\n( " + k.getFileSize(k.getDriveFreeSize()) + " / " + k.getFileSize(k.getDriveFullSize()) + " )");
-                            bar.setProgress((int) (75 * ((double) k.getDriveFreeSize() / (double) k.getDriveFullSize())));
+                            stageData +=(int)msg.obj;
+                            stage.setText(DriveListItem.getFileSize(stageData) + " 용량을 확인했습니다." );
+                            percentage.setText(roundTwoDecimals(90 * (double)stageData/(double)k.getDriveFreeSize()) +"%");
+                            bar.setProgress((int)(75  * 0.9 *((double)stageData/(double)k.getDriveFreeSize())));
                         break;
                     case 1:
                         start();
@@ -60,6 +68,7 @@ public class Wiping extends Activity {
                     case 2:
                         complete();
                         break;
+
                 }
                 return true;
             }
@@ -70,6 +79,10 @@ public class Wiping extends Activity {
         th.start();
     }
 
+    public double roundTwoDecimals(double d) {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
+    }
 
     /* cache 파일 삭제 함수 */
     public void clearApplicationData(){
@@ -121,15 +134,12 @@ public class Wiping extends Activity {
         {
             case R.id.stopBtn:
                 work = false;// 작업 스레드 상황 종료
-                for(int i=0;i<wRunnable.getR().length;i++)
-                {
-                        if((wRunnable.getThread())[i].isAlive()) (wRunnable.getR())[i].setWork(false); // 작업 스레드 내부 스레드 상황 종료
-                }
                 try {
                     th.join();//작업 스레드 상황 종료 대기
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 break;
             case R.id.returnedmainBtn:
                 setResult(0);
@@ -142,6 +152,7 @@ public class Wiping extends Activity {
         }
     }
 
+    //작업 스레드
     class serviceThread implements Runnable{
         private  Thread CTF[];
         private CreateTempFile[] r;
@@ -154,7 +165,7 @@ public class Wiping extends Activity {
             m.sendEmptyMessage(1);
             for (int count = 0; work && count < 1; count++) {
                 for (int i = 0;  work && i < CTF.length; i++) {
-                    r[i] = new CreateTempFile(count * 10 + i, getApplicationContext(), m);
+                    r[i] = new CreateTempFile(count  * 10 + i,1024*1024);
                     CTF[i] = new Thread(r[i]);
                     CTF[i].start();
                 }
@@ -184,6 +195,30 @@ public class Wiping extends Activity {
         public CreateTempFile[] getR() {
             return r;
         }
+    }
+
+    //파일 생성 스레드
+    class CreateTempFile implements Runnable{
+        private FileController cachefile;
+        private int filenumber;
+
+        public CreateTempFile (int inputnumber,int size){
+            cachefile = new FileController(inputnumber, size, getApplicationContext());
+            filenumber = inputnumber;
+        }
+        public void run(){
+            int counter = 0;
+            while(work && counter < 256){
+                cachefile.fillbuffer();
+                cachefile.writedata();
+                m.sendMessage(m.obtainMessage(0,cachefile.getBufferSize()));
+                counter++;
+            }
+
+            Log.d("test", "File " + filenumber + " CREATE");
+            cachefile.close();
+        }
+
     }
 
 /* 진행상황 표기 방법

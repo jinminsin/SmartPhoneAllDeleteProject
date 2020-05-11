@@ -14,15 +14,16 @@ public class FileController {
     /* current buffer size = 16KB
     해당 버퍼의 크기만큼 한 파일에 랜덤데이터 256회 생성 후 입력.
     current file size = 40MB */
-    private byte[] buffer = new byte[4*1024*1024];
+    private byte[] buffer;
     // 16 * 1024 * 256
 
     public int getBufferSize(){
         return buffer.length;
     }
 
-    public FileController(int inputnumber, Context context)
+    public FileController(int inputnumber, int size, Context context)
     {
+        buffer = new byte[4*size];
         /* cache file 생성 경로 설정 */
         cacheDir = context.getExternalCacheDir();
         cacheFile = new File(cacheDir.getAbsolutePath(), "File " + inputnumber);
