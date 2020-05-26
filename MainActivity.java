@@ -1,26 +1,18 @@
 package com.koia.smartphonealldelete;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 
 public class MainActivity extends Activity {
+    private Popup dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ActivityManager actManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
-        actManager.getMemoryInfo(memInfo);
-        long totalMemory = memInfo.totalMem;
-        Log.d("토탈 메모리",""+DriveListItem.getFileSize(totalMemory));
     }
 
     @Override
@@ -47,7 +39,31 @@ public class MainActivity extends Activity {
     }
 
     public void startWiping(View view) {
-        Intent listItem = new Intent(MainActivity.this, DriveList.class);
-        startActivityForResult(listItem,0);
+            showAlertDialog();
     }
+
+    private void showAlertDialog() {
+        dialog = new Popup(this,0,okClick,noClick);
+        dialog.show();
+    }
+
+    private View.OnClickListener okClick = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view) {
+            dialog.dismiss();
+            Intent listItem = new Intent(MainActivity.this, DriveList.class);
+            startActivityForResult(listItem,0);
+        }
+    };
+
+    private View.OnClickListener noClick = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view) {
+            dialog.dismiss();
+            Intent help = new Intent(MainActivity.this, HelpContent.class);
+            startActivity(help);
+        }
+    };
 }

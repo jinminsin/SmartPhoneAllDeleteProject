@@ -84,7 +84,7 @@ public class DriveList extends Activity {
     }
 
     private void showAlertDialog() {
-        dialog = new Popup(this,okClick,noClick);
+        dialog = new Popup(this,1,okClick,noClick);
         dialog.show();
     }
 

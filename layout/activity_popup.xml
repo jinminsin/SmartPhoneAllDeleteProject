@@ -22,6 +22,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/contentText"
                     android:layout_width="280dp"
                     android:layout_height="160dp"
                     android:layout_gravity="center"

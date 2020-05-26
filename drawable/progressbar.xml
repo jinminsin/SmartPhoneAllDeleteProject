@@ -7,12 +7,17 @@
             android:pivotY="50%"
             android:toDegrees="135" >
             <shape
-                android:shape="ring"
                 android:innerRadiusRatio="2.2"
+                android:shape="ring"
                 android:thickness="5dp"
                 android:useLevel="true">
 
-                <solid android:color="#FFF" />
+                <gradient
+                    android:angle="0"
+                    android:endColor="#F3F781"
+                    android:startColor="#FA8258"
+                    android:type="sweep"
+                    android:useLevel="false" />
             </shape>
         </rotate>
     </item>

@@ -20,10 +20,8 @@ import java.io.File;
 import java.text.DecimalFormat;
 
 public class Wiping extends Activity {
-    private long stageData = 0;
-    private TextView stage;
-    private TextView percentage;
-    private TextView drive;
+    private long checkData = 0;
+    private TextView stage, percentage, drive, comment;
     private ProgressBar bar;
     private Button stopBtn, returnBtn, turnoffBtn;
     private DriveListItem k;
@@ -32,6 +30,16 @@ public class Wiping extends Activity {
     private Thread th;
     private serviceThread wRunnable;
     private boolean work = true;
+
+    private final int mode_Check = 0;
+    private final int mode_BufferStart = 1;
+    private final int mode_Buffer = 2;
+    private final int mode_DeleteStart = 3;
+    private final int mode_Delete = 4;
+    private final int mode_Start = 5;
+    private final int mode_Complete = 6;
+    private final int mode_Stop = 7;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,32 +51,61 @@ public class Wiping extends Activity {
         drive = findViewById(R.id.drive);
         stage = findViewById(R.id.stage);
         percentage = findViewById(R.id.percentage);
+        comment = findViewById(R.id.comment);
         stopBtn = findViewById(R.id.stopBtn);
         returnBtn = findViewById(R.id.returnedmainBtn);
         turnoffBtn = findViewById(R.id.turnoffBtn);
         bar = findViewById(R.id.progress);
 
         k = (DriveListItem)getIntent().getSerializableExtra("DRIVE");
-        drive.setText(k.getDriveName()+"\n( "+k.getFileSize(k.getDriveFullSize() - k.getDriveFreeSize())+" / "+k.getFileSize(k.getDriveFullSize())+" )");
-        bar.setProgress((int)(75 * ((double)stageData/(double)k.getDriveFreeSize())));
+        drive.setText(k.getDriveName()+"\nWiping Storage : "+k.getFileSize( k.getDriveFreeSize()));
+        bar.setProgress((int)(75 * ((double)checkData/(double)k.getDriveFreeSize())));
 
         m = new Handler(new Handler.Callback() {
             @Override
             public synchronized boolean handleMessage(@NonNull Message msg) {
                 switch (msg.what) {
-                    case 0:
-                            stageData +=(int)msg.obj;
-                            stage.setText(DriveListItem.getFileSize(stageData) + " 용량을 확인했습니다." );
-                            percentage.setText(roundTwoDecimals(90 * (double)stageData/(double)k.getDriveFreeSize()) +"%");
-                            bar.setProgress((int)(75  * 0.9 *((double)stageData/(double)k.getDriveFreeSize())));
+                    case mode_Check:
+                           checkData +=(int)msg.obj;
+                            stage.setText(DriveListItem.getFileSize(checkData) + " 용량을 확인했습니다." );
+                            percentage.setText(roundTwoDecimals(90 * (double)checkData/(double)k.getDriveFreeSize()) +"%");
+                            bar.setProgress((int)(75  * 0.9 *((double)checkData/(double)k.getDriveFreeSize())));
                         break;
-                    case 1:
+                    case mode_BufferStart:
+                        comment.setText("대기 중...");
+                        percentage.setText(roundTwoDecimals(90 ) +"%");
+                        stage.setText("삭제를 위한 시스템 대기 중입니다.");
+                        break;
+                    case mode_Buffer:
+                        percentage.setText(90 + (int)msg.obj/12 + "%");
+                        bar.setProgress((int)(75  * (0.9 + (int)msg.obj /1200)));
+                        break;
+                    case mode_DeleteStart:
+                        percentage.setText(roundTwoDecimals(95 ) +"%");
+                        comment.setText("제거 중...");
+                        checkData = 0;
+                        break;
+                    case mode_Delete:
+                        checkData += (long)msg.obj;
+                        stage.setText(DriveListItem.getFileSize(checkData) + " 제거 완료했습니다." );
+                        percentage.setText(roundTwoDecimals(95 + 5 * (double)checkData/(double)k.getDriveFreeSize()) +"%");
+                        bar.setProgress((int)(75  * (0.9 + 0.05 * ((double)checkData/(double)k.getDriveFreeSize()))));
+                        break;
+                    case mode_Start:
+                        comment.setText("작업 중...");
                         start();
                         break;
-                    case 2:
+                    case mode_Complete:
+                        percentage.setText(roundTwoDecimals(100) +"%");
+                        comment.setText("삭제 완료");
+                        stage.setText("모든 데이터가 삭제되었습니다.");
                         complete();
                         break;
-
+                    case mode_Stop:
+                        comment.setText("중지 완료");
+                        percentage.setText("중지");
+                        stage.setText("시스템 중지를 완료하였습니다.");
+                        bar.setProgress(75);
                 }
                 return true;
             }
@@ -97,7 +134,7 @@ public class Wiping extends Activity {
             }
         }
     }
-    public static boolean deleteDir(File dir){
+    public boolean deleteDir(File dir){
         if (dir != null && dir.isDirectory()){
             String[] children = dir.list();
             for (int i=0; i<children.length; i++){
@@ -107,7 +144,7 @@ public class Wiping extends Activity {
                 }
             }
         }
-        Log.d("test","File "+dir.getName()+" DELETE " );
+        m.sendMessage(m.obtainMessage(mode_Delete,dir.length()));
         return dir.delete();
     }
 
@@ -139,6 +176,7 @@ public class Wiping extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                m.sendEmptyMessage(mode_Stop);
                 break;
             case R.id.returnedmainBtn:
                 setResult(0);
@@ -158,34 +196,39 @@ public class Wiping extends Activity {
         long storageSize;
         private int[] size = {1024*1024, 1024};
         private int fileindex=0;
+
         @Override
         public void run() {
             storageSize = k.getDriveFreeSize();
-            long beforeTime = System.currentTimeMillis();
 
-            for(int i=0;i<size.length;i++)
+            for(int i=0; work && i<size.length; i++)
                 insert(size[i]);
             /* cache file 생성 시작 */
 
-            long afterTime = System.currentTimeMillis();
-            long secDiffTime = (afterTime - beforeTime) / 1000;
-            Log.d("test", "실행시간 : " + secDiffTime + "sec");
             /* cache file 생성 종료 */
+            m.sendEmptyMessage(mode_BufferStart);
+            for(int i=0;work && i<60;i++)
+                try {
+                    m.sendMessage(m.obtainMessage(mode_Buffer,i+1));
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+            }
 
             /* cache 파일 삭제함수 실행 */
+            m.sendEmptyMessage(mode_DeleteStart);
             clearApplicationData();
-            m.sendEmptyMessage(2);
+            m.sendEmptyMessage(mode_Complete);
         }
 
         public void insert(int size) {
             CTF = new Thread[10];
             r = new CreateTempFile[10];
-            m.sendEmptyMessage(1);
-            int repeat = (int) (storageSize / (size * 1024)); // 384 GB
-            Log.d("반복", "" + repeat);
+            m.sendEmptyMessage(mode_Start);
+            int repeat = (int) (storageSize / (size * 1024));
 
-            for (int count = 0; work && count < (repeat / 10); count++) { // 38
-                for (int i = 0; i < CTF.length; i++) {//10GB
+            for (int count = 0; work && count < (repeat / 10); count++) {
+                for (int i = 0; i < CTF.length; i++) {
                     r[i] = new CreateTempFile(fileindex++, size);
                     CTF[i] = new Thread(r[i]);
                     CTF[i].start();
@@ -199,6 +242,7 @@ public class Wiping extends Activity {
                     }
                 }
             }
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -206,11 +250,9 @@ public class Wiping extends Activity {
             }
 
             if(work) {
-                storageSize = k.getDriveFreeSize() - stageData;
-                Log.d("스토리지", "" + DriveListItem.getFileSize(storageSize));
-                repeat = (int) (storageSize / (size * 1024));//4GB
-                Log.d("반복2", "" + repeat);
-                CTF = new Thread[repeat];// 9gb
+                storageSize = k.getDriveFreeSize() - checkData;
+                repeat = (int) (storageSize / (size * 1024));
+                CTF = new Thread[repeat];
                 r = new CreateTempFile[repeat];
 
                 for (int i = 0; i < CTF.length; i++) {
@@ -232,7 +274,8 @@ public class Wiping extends Activity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                storageSize = k.getDriveFreeSize() - stageData;
+
+                storageSize = k.getDriveFreeSize() - checkData;
             }
         }
 
@@ -263,17 +306,19 @@ public class Wiping extends Activity {
             while(work && counter <  (mode == 0 ? 256  : 1)){
                 cachefile.fillbuffer();
                 cachefile.writedata();
-                m.sendMessage(m.obtainMessage(0,cachefile.getBufferSize()));
+                m.sendMessage(m.obtainMessage(mode_Check,cachefile.getBufferSize()));
                 counter++;
             }
-
-            Log.d("test", "File " + filenumber + " CREATE");
             cachefile.close();
         }
 
     }
 
-/* 진행상황 표기 방법
+    @Override
+    public void onBackPressed() {
+    }
+
+    /* 진행상황 표기 방법
  0~90% ( 임시파일 생성 )
  91~95% ( 대기 )
  96~성공 ( 데이터 삭제 )  */
