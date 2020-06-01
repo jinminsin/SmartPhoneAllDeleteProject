@@ -108,4 +108,10 @@ public class DriveList extends Activity {
             finish();
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        setResult(1);
+        super.onBackPressed();
+    }
 }

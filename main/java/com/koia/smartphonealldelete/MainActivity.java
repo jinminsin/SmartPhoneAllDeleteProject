@@ -20,9 +20,11 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         //드라이브 리스트
         if(requestCode == 0) {
-                Intent wiping = new Intent(this,Wiping.class);
-                wiping.putExtra("DRIVE",data.getSerializableExtra("DRIVE"));
-                startActivityForResult(wiping,1);
+                if(resultCode == 0) {
+                    Intent wiping = new Intent(this, Wiping.class);
+                    wiping.putExtra("DRIVE", data.getSerializableExtra("DRIVE"));
+                    startActivityForResult(wiping, 1);
+                }
         }
         //wiping 이후 작동
         if(requestCode == 1) {
@@ -49,7 +51,7 @@ public class MainActivity extends Activity {
         public void onClick(View view) {
             dialog.dismiss();
             Intent listItem = new Intent(MainActivity.this, DriveList.class);
-            startActivity(listItem);
+            startActivityForResult(listItem, 0);
         }
     };
 
