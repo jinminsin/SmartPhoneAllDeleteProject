@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">SmartPhoneAllDelete</string>
+    <string name="help1_title">1, SAMSUNG 기종</string>
+    <string name="help1_subject1">1) 디바이스 전원 종료</string>
+    <string name="help1_subject2">2 - 1) 홈버튼이 있는경우 :</string>
+    <string name="help1_content2">+ 볼륨키와 홈버튼을 누른 상태에서 전원 버튼을 계속 누르며 부팅</string>
+    <string name="help1_subject3">2 - 2) 홈버튼이 없는경우 :</string>
+    <string name="help1_content3">+ 볼륨키와 빅스비 버튼을 누른 상태에서 전원버튼을 계속 누르며 부팅</string>
+    <string name="help1_subject4">3) 볼륨키로 조절해서 wipe data/factory reset를 전원 버튼으로 선택</string>
+    <string name="help1_subject5">4) Yes --delete all user data를 전원 버튼으로 선택</string>
+    <string name="help2_title">2, LG 기종</string>
+    <string name="help2_subject1">1) 디바이스 전원 종료</string>
+    <string name="help2_subject2">2) 로고 화면이 나타났을 때 볼륨 조절 상하 버튼 클릭</string>
+    <string name="help2_subject3">3) 볼륨키로 factory data reset, 또는 Factory reset을 전원 버튼으로 선택</string>
+    <string name="help2_subject4">4) Yes로 이동한 다음 전원버튼으로 선택</string>
+    <string name="help3_title">3, 공통</string>
+    <string name="help3_subject1">1) 설정 - 일반 - 초기화로 이동</string>
+    <string name="help3_subject2">2) 디바이스 전체 초기화로 이동</string>
+    <string name="help3_subject3">3) 초기화 클릭</string>
+    <string name="help3_subject4">4) 모두 삭제 클릭</string>
+</resources>
