@@ -77,8 +77,8 @@ public class Wiping extends Activity {
                         stage.setText("삭제를 위한 시스템 대기 중입니다.");
                         break;
                     case mode_Buffer:
-                        percentage.setText(roundTwoDecimals(90 + (double)msg.obj/12) + "%");
-                        bar.setProgress((int)(75  * (0.9 + (double)msg.obj /1200)));
+                        percentage.setText(roundTwoDecimals(90 + ((int)msg.obj/(double)12)) + "%");
+                        bar.setProgress((int)(75  * (0.9 + (int)msg.obj /(double)1200)));
                         break;
                     case mode_DeleteStart:
                         percentage.setText(roundTwoDecimals(95 ) +"%");
