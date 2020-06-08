@@ -79,7 +79,7 @@ public class Wiping extends Activity {
                         bar.setProgress((int)(75  * (0.9 + 0.05 * (int)msg.obj /(double)60)));
                         break;
                     case mode_DeleteStart:
-                        percentage.setText(roundTwoDecimals(99) +"%");
+                        percentage.setText(roundTwoDecimals(95) +"%");
                         comment.setText("제거 중...");
                         stage.setText("복구 불가능하게 제거 중입니다.");
                         checkData = 0;
