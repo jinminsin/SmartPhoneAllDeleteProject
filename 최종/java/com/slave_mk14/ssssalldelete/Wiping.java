@@ -157,12 +157,6 @@ public class Wiping extends Activity {
 
     private void complete()
     {
-        try {
-            th.join();//작업 스레드 상황 종료 대기
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         stopBtn.setClickable(false);
         stopBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.wiping_button_off));
         returnBtn.setClickable(true);
@@ -214,26 +208,35 @@ public class Wiping extends Activity {
             for(int i=0; work && i<size.length; i++)
                 insert(size[i]);
 
-            /* cache file 생성 종료 */
-            sysCommand.sendEmptyMessage(mode_BufferStart);
-            for(int i=0;work && i<60;i++)
-                try {
-                    sysCommand.sendMessage(sysCommand.obtainMessage(mode_Buffer,i+1));
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            //버퍼링 이후부터는 중지 불가
+            if(stopBtn.isClickable())
+                stopBtn.setClickable(false);
+
+            if(work) {
+                /* cache file 생성 종료 */
+                sysCommand.sendEmptyMessage(mode_BufferStart);
+                for (int i = 0; i < 60; i++)
+                    try {
+                        sysCommand.sendMessage(sysCommand.obtainMessage(mode_Buffer, i + 1));
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
             }
 
-            /* cache 파일 삭제함수 실행 */
-            sysCommand.sendEmptyMessage(mode_DeleteStart);
-            clearApplicationData();
-            sysCommand.sendEmptyMessage(mode_Wait);
-            try {
-                Thread.sleep(30000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                /* cache 파일 삭제함수 실행 */
+                sysCommand.sendEmptyMessage(mode_DeleteStart);
+                clearApplicationData();
+
+            if(work) {
+                sysCommand.sendEmptyMessage(mode_Wait);
+                try {
+                    Thread.sleep(30000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            sysCommand.sendEmptyMessage(mode_Complete);
+                sysCommand.sendEmptyMessage(mode_Complete);
         }
 
         public void insert(int size) {
